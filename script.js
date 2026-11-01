@@ -133,7 +133,7 @@ function syncSelectToInput(state) {
                 break;
             }
         }
-        state.baseSelect.value = matchAfter ? String(numVal) : '64';
+        state.baseSelect.value = matchAfter ? String(numVal) : 'otra';
     }
 }
 
