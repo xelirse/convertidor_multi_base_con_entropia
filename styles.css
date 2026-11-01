@@ -410,3 +410,9 @@ button.convert-btn .auto-badge {
     opacity: 0.4;
     cursor: not-allowed;
 }
+.sort-select {
+    flex: 0 0 auto;
+    min-width: 180px;
+    padding: 6px 10px;
+    font-size: 13px;
+}

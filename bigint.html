@@ -43,10 +43,11 @@
                 <input type="checkbox" id="uppercaseCheck">
                 Mayúsculas (bases 2-36)
             </label>
-            <label class="checkbox-label">
-                <input type="checkbox" id="sortEntropyCheck">
-                Ordenar por entropía
-            </label>
+            <select id="sortModeSelect" class="sort-select" title="Orden de las tarjetas">
+                <option value="none" selected>Sin ordenar</option>
+                <option value="entropy">Ordenar por entropía</option>
+                <option value="efficiency">Ordenar por eficiencia</option>
+            </select>
             <button type="button" class="sort-direction-btn" id="sortDirectionBtn" disabled title="Mayor a menor">↓</button>
             <span class="status-indicator" id="statusIndicator">
                 <span class="status-dot"></span>

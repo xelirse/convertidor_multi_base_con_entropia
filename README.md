@@ -17,9 +17,13 @@ Una herramienta web (HTML + CSS + JS separados) que convierte un número escrito
   - `máx`: entropía máxima teórica de esa base (`log₂(base)`).
   - `% efic.`: relación entre la entropía real y la máxima posible, con barra visual.
 - **Auto-conversión con debounce**: 1 segundo tras dejar de escribir.
-- **Sincronización select ↔ input numérico**: elige base desde el desplegable o escríbela; ambos se mantienen coherentes.
-- **Ordenación por entropía**: checkbox para activar el orden por entropía, con botón para alternar entre mayor→menor y menor→mayor. Desactivado, respeta el orden predeterminado (primero las 10 bases principales, luego el resto).
-- **Bases principales primero**: `2, 3, 8, 10, 16, 23, 30, 32, 36, 64` aparecen al inicio de la cuadrícula.
+- **Sincronización select ↔ input numérico**: elige base desde el desplegable o escríbela; ambos se mantienen coherentes. Si escribes una base que no está en la lista predefinida, el desplegable muestra **"Otra base"**.
+- **Ordenación configurable mediante select**:
+  - `Sin ordenar` → orden predeterminado (primero las 10 bases principales, luego el resto).
+  - `Ordenar por entropía` → por entropía de Shannon.
+  - `Ordenar por eficiencia` → por porcentaje de eficiencia.
+  - Un botón `↓` / `↑` alterna entre mayor→menor y menor→mayor. Se deshabilita cuando la ordenación está en "Sin ordenar".
+- **Bases principales primero**: `2, 3, 8, 10, 16, 23, 30, 32, 36, 64` aparecen al inicio de la cuadrícula en el orden predeterminado.
 - **Mayúsculas opcionales** para bases 2–36.
 - **Copiar al portapapeles** con un clic en cada tarjeta, con fallback para navegadores sin `navigator.clipboard`.
 - **Manejo de errores** con animación de sacudida para caracteres inválidos.
@@ -52,6 +56,22 @@ Los caracteres válidos para Base 64 son el alfabeto estándar:
 ```text
 ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/
 ```
+
+### Opciones de base de origen
+
+El desplegable incluye atajos a las bases más usadas y una entrada adicional para bases personalizadas:
+
+| Opción del select | Base usada |
+|-------------------|------------|
+| `2 (Binario)` | 2 |
+| `8 (Octal)` | 8 |
+| `10 (Decimal)` | 10 |
+| `16 (Hexadecimal)` | 16 |
+| `36 (Alfanumérico)` | 36 |
+| `64 (Base 64)` | 64 |
+| `Otra base` | El número escrito en el input |
+
+Si escribes un número en el input que no coincide con ninguna opción (por ejemplo `5`, `7`, `12`, `27`…), el desplegable cambia automáticamente a **"Otra base"**.
 
 ---
 
@@ -102,6 +122,17 @@ programa()
                                              ├─ sortResults()
                                              └─ renderCard()
 ```
+
+### Estado de ordenación
+
+El orden de las tarjetas se controla con dos campos del estado:
+
+| Campo | Valores | Significado |
+|-------|---------|-------------|
+| `sortMode` | `'none'` \| `'entropy'` \| `'efficiency'` | Criterio de ordenación |
+| `sortDirection` | `'desc'` \| `'asc'` | Mayor→menor o menor→mayor |
+
+Cuando `sortMode === 'none'`, `sortResults()` devuelve el array original sin tocar, respetando el orden predeterminado de `TARGET_BASES` (10 principales y luego el resto). En los otros dos modos se ordena con desempate estable por índice original.
 
 ---
 

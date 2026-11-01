@@ -93,12 +93,19 @@ function buildResults(state, bigIntValue, useUppercase) {
 }
 
 function sortResults(state, results) {
-    if (!state.sortByEntropy) return results;
+    if (state.sortMode === 'none') return results;
     const sorted = results.slice();
     sorted.sort(function (a, b) {
-        const diff = state.sortDirection === 'asc'
-            ? a.entropy - b.entropy
-            : b.entropy - a.entropy;
+        let diff;
+        if (state.sortMode === 'efficiency') {
+            diff = state.sortDirection === 'asc'
+                ? a.efficiency - b.efficiency
+                : b.efficiency - a.efficiency;
+        } else {
+            diff = state.sortDirection === 'asc'
+                ? a.entropy - b.entropy
+                : b.entropy - a.entropy;
+        }
         if (diff !== 0) return diff;
         return a.order - b.order;
     });
@@ -205,7 +212,7 @@ function updateSortDirectionButton(state) {
     state.sortDirectionBtn.title = state.sortDirection === 'asc'
         ? 'Menor a mayor'
         : 'Mayor a menor';
-    state.sortDirectionBtn.disabled = !state.sortByEntropy;
+    state.sortDirectionBtn.disabled = state.sortMode === 'none';
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -251,8 +258,8 @@ function handleUppercaseCheckChange(state) {
     scheduleAutoConvert(state);
 }
 
-function handleSortEntropyChange(state) {
-    state.sortByEntropy = state.sortEntropyCheck.checked;
+function handleSortModeChange(state) {
+    state.sortMode = state.sortModeSelect.value;
     updateSortDirectionButton(state);
     convertAndDisplay(state, false, true);
 }
@@ -355,7 +362,7 @@ function convertAndDisplay(state, isAuto = false, force = false) {
         inputStr === state.lastConvertedInput &&
         currentBase === state.lastConvertedBase &&
         currentUppercase === state.lastUppercaseState &&
-        state.sortByEntropy === state.lastSortByEntropy &&
+        state.sortMode === state.lastSortMode &&
         state.sortDirection === state.lastSortDirection &&
         state.resultsGrid.children.length > 0) {
         setStatus(state, 'updated', 'Sin cambios');
@@ -381,7 +388,7 @@ function convertAndDisplay(state, isAuto = false, force = false) {
         state.lastConvertedInput = inputStr;
         state.lastConvertedBase = currentBase;
         state.lastUppercaseState = useUppercase;
-        state.lastSortByEntropy = state.sortByEntropy;
+        state.lastSortMode = state.sortMode;
         state.lastSortDirection = state.sortDirection;
 
         state.errorMsg.style.display = "none";
@@ -441,7 +448,7 @@ function createState() {
         resultsGrid: document.getElementById("resultsGrid"),
         errorMsg: document.getElementById("errorMsg"),
         uppercaseCheck: document.getElementById("uppercaseCheck"),
-        sortEntropyCheck: document.getElementById("sortEntropyCheck"),
+        sortModeSelect: document.getElementById("sortModeSelect"),
         sortDirectionBtn: document.getElementById("sortDirectionBtn"),
         convertBtn: document.getElementById("convertBtn"),
         statusIndicator: document.getElementById("statusIndicator"),
@@ -457,9 +464,9 @@ function createState() {
         lastConvertedBase: 64,
         lastUppercaseState: false,
 
-        sortByEntropy: false,
+        sortMode: 'none',
         sortDirection: 'desc',
-        lastSortByEntropy: false,
+        lastSortMode: 'none',
         lastSortDirection: 'desc'
     };
 }
@@ -476,7 +483,7 @@ function programa() {
     state.baseInput.addEventListener('blur', handleBaseInputBlur.bind(null, state));
     state.textInput.addEventListener('input', handleTextInputInput.bind(null, state));
     state.uppercaseCheck.addEventListener('change', handleUppercaseCheckChange.bind(null, state));
-    state.sortEntropyCheck.addEventListener('change', handleSortEntropyChange.bind(null, state));
+    state.sortModeSelect.addEventListener('change', handleSortModeChange.bind(null, state));
     state.sortDirectionBtn.addEventListener('click', handleSortDirectionClick.bind(null, state));
     state.textInput.addEventListener('keypress', handleKeyPress.bind(null, state));
     state.baseInput.addEventListener('keypress', handleKeyPress.bind(null, state));
