@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<!--Powered by AI by Xelirse-->
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convertidor Multi-Base a BigInt con Entropía</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="container" id="mainContainer">
+        <h2>Convertidor Multi-Base con Entropía</h2>
+
+        <div class="top-row">
+            <div class="field-group">
+                <label for="baseSelect">Base de origen (2 a 36, o 64):</label>
+                <div class="base-group">
+                    <select id="baseSelect">
+                        <option value="2">2 (Binario)</option>
+                        <option value="8">8 (Octal)</option>
+                        <option value="10">10 (Decimal)</option>
+                        <option value="16">16 (Hexadecimal)</option>
+                        <option value="36">36 (Alfanumérico)</option>
+                        <option value="64" selected>64 (Base 64)</option>
+                    </select>
+                    <input type="number" id="baseInput" value="64" min="2" max="64">
+                </div>
+            </div>
+            <div class="field-group">
+                <label for="textInput">Texto a convertir:</label>
+                <input type="text" id="textInput" placeholder="Ej: AQAB o 101010" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="action-row">
+            <button class="convert-btn" id="convertBtn">
+                ⚡ Convertir ahora
+                <span class="auto-badge">Auto en 1s</span>
+            </button>
+            <label class="checkbox-label">
+                <input type="checkbox" id="uppercaseCheck">
+                Mayúsculas (bases 2-36)
+            </label>
+            <label class="checkbox-label">
+                <input type="checkbox" id="sortEntropyCheck">
+                Ordenar por entropía
+            </label>
+            <button type="button" class="sort-direction-btn" id="sortDirectionBtn" disabled title="Mayor a menor">↓</button>
+            <span class="status-indicator" id="statusIndicator">
+                <span class="status-dot"></span>
+                <span id="statusText">Listo</span>
+            </span>
+        </div>
+
+        <div id="errorMsg" class="error"></div>
+
+        <div class="results-grid" id="resultsGrid">
+            <!-- Tarjetas dinámicas generadas por JS -->
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
